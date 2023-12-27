@@ -65,12 +65,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     boolean isLeaf(Bitmap image) {
-        // Implementa la lógica para verificar si la imagen es una hoja
-        // Por ejemplo, podrías considerar el color, forma u otras características específicas de las hojas.
-        // Supongamos que aquí se realiza algún tipo de verificación de hoja.
-        // Retorna true si la imagen parece ser una hoja, false si no lo es.
-        return true; // Cambia esto según tu lógica de verificación de hojas.
+        // Ejemplo simple: verifica si la imagen tiene un área verde significativa
+        int greenPixels = 0;
+        int totalPixels = image.getWidth() * image.getHeight();
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int pixel = image.getPixel(x, y);
+                int red = (pixel >> 16) & 0xFF;
+                int green = (pixel >> 8) & 0xFF;
+                int blue = pixel & 0xFF;
+
+                // Si el componente verde es mayor que los demás, se considera un píxel verde
+                if (green > red && green > blue) {
+                    greenPixels++;
+                }
+            }
+        }
+
+        // Calcula la proporción de píxeles verdes en la imagen
+        double greenRatio = (double) greenPixels / totalPixels;
+
+        // Establece un umbral para definir si la imagen parece ser una hoja
+        double threshold = 0.1; // Puedes ajustar este valor según tus necesidades
+
+        return greenRatio > threshold;
     }
+
 
     public void classifyImage(Bitmap image) {
         try {
@@ -149,7 +170,8 @@ public class MainActivity extends AppCompatActivity {
                 if (isLeaf(image)) {
                     classifyImage(image);
                 } else {
-                    result.setText("La imagen capturada no es una hoja. Intenta de nuevo.");
+                    result.setText("Esto no parece un cultivo.");
+//                    progressBar.setVisibility(View.INVISIBLE);
                 }
             } else {
                 Uri dat = data.getData();
@@ -167,10 +189,12 @@ public class MainActivity extends AppCompatActivity {
                 if (isLeaf(image)) {
                     classifyImage(image);
                 } else {
-                    result.setText("La imagen seleccionada no es una hoja. Intenta de nuevo.");
+                    result.setText("Esto no parece un cultivo.");
+//                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }
