@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.base4.ml.Model;
@@ -64,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    boolean isLeaf(Bitmap image) {
-        // Ejemplo simple: verifica si la imagen tiene un área verde significativa
+    //funcion para validar si la imagen capturada o cargada desde galeria es una hoja
+    boolean validarHoja(Bitmap image) {
+        // verifica si la imagen tiene un área verde significativa
         int greenPixels = 0;
         int totalPixels = image.getWidth() * image.getHeight();
 
@@ -87,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
         double greenRatio = (double) greenPixels / totalPixels;
 
         // Establece un umbral para definir si la imagen parece ser una hoja
-        double threshold = 0.1; // Puedes ajustar este valor según tus necesidades
+        // en un inicio se tenia esto threshold = 0.1; pero se aumento para una validacion mas robusta
+        double threshold = 0.3;
 
         return greenRatio > threshold;
     }
@@ -147,6 +150,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             result.setText(resultText);
+            //codigo nuevo barra de progreso aqui se presenta
+            float precisionPercentage = maxConfidence * 100;
+
+            // Actualizar la barra de progreso con la precisión obtenida
+            ProgressBar progressBar = findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgress((int) precisionPercentage);
 
             // Liberar los recursos del modelo si ya no son utilizados.
             model.close();
@@ -169,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
                 // Verificar si la imagen parece ser una hoja antes de clasificar
-                if (isLeaf(image)) {
+                if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
                     result.setText("Esto no parece un cultivo.");
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
                 // Verificar si la imagen parece ser una hoja antes de clasificar
-                if (isLeaf(image)) {
+                if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
                     result.setText("Esto no parece un cultivo.");

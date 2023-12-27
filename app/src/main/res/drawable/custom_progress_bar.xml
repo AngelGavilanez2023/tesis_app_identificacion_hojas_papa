@@ -11,27 +11,13 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="#00FF00" />
+                <solid android:color="#8EB534" />
                 <size
                     android:width="20dp"
                 android:height="20dp" />
             </shape>
         </clip>
     </item>
-    <item android:id="@android:id/text1">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
 
-            <TextView
-                android:id="@+id/progressText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="0%"
-                android:textSize="12sp"
-                android:layout_centerInParent="true" />
-        </RelativeLayout>
-    </item>
+
 </layer-list>
