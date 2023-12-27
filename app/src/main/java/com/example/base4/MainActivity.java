@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     public void classifyImage(Bitmap image) {
         try {
             Model model = Model.newInstance(getApplicationContext());
