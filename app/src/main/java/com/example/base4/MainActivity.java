@@ -141,13 +141,14 @@ public class MainActivity extends AppCompatActivity {
             String predictedClass = classes[maxPos];
 
             // Formatear el resultado con precisión en porcentaje y mensaje adicional
-            String resultText = predictedClass + "\nPrecision: " + String.format("%.2f", maxConfidence * 100) + "%\n";
+            String resultText = predictedClass + "\nPrecisión: " + String.format("%.2f", maxConfidence * 100) + "%\n";
 
-            if (predictedClass.equals("Hoja Sana")) {
-                resultText += "No necesitas aplicar fungicidas";
-            } else {
-                resultText += "Necesitas aplicar fungicidas";
-            }
+            //CODIGO TRATAMIENTOS
+//            if (predictedClass.equals("Hoja Sana")) {
+//                resultText += "No necesitas aplicar fungicidas";
+//            } else {
+//                resultText += "Necesitas aplicar fungicidas";
+//            }
 
             result.setText(resultText);
             //codigo nuevo barra de progreso aqui se presenta
