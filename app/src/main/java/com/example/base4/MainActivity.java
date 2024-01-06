@@ -26,17 +26,26 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.example.base4.DB.DBmanager;
+
+
+
 public class MainActivity extends AppCompatActivity {
 
-    Button camera, gallery;
-    ImageView imageView;
-    TextView result;
-    int imageSize = 256;
+    private Button camera, gallery;
+    private ImageView imageView;
+    private TextView result;
+
+    private int imageSize = 256;
+    private DBmanager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inicializar DBmanager
+        dbManager = new DBmanager(this);
 
         camera = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
@@ -55,6 +64,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, 2); // Cambié el código de solicitud a 2
+            }
+        });
+
+        try {
+            // Abrir la base de datos para escritura
+            dbManager.open();
+            // Insertar datos de prueba
+            dbManager.insertarTratamiento("Hoja pulguilla", "Aplicar aceite de neem en las hojas y tallos de la planta");
+            dbManager.insertarTratamiento("Hoja Sana", "No necesitas aplicar fungicidas");
+            dbManager.insertarTratamiento("Hoja con Tizon Tardio", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
+            dbManager.insertarTratamiento("Hoja con Tizon Temprano", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar la base de datos
+            dbManager.close();
+        }
+        //fin codigo tratamiento con bbdd
+
+
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
