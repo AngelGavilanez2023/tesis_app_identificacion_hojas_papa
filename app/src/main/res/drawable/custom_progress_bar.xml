@@ -3,7 +3,7 @@
     <!-- Fondo de la barra de progreso -->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="10dp" />
+            <corners android:radius="3dp" />
             <solid android:color="#E0E0E0" />
         </shape>
     </item>

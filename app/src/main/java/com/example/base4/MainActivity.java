@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             // Abrir la base de datos para escritura
             dbManager.open();
             // Insertar datos de prueba
-            dbManager.insertarTratamiento("Hoja pulguilla", "Aplicar aceite de neem en las hojas y tallos de la planta");
-            dbManager.insertarTratamiento("Hoja Sana", "No necesitas aplicar fungicidas");
-            dbManager.insertarTratamiento("Hoja con Tizon Tardio", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
-            dbManager.insertarTratamiento("Hoja con Tizon Temprano", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
+            dbManager.insertarTratamiento("\nHoja con Pulguilla", "Aplicar aceite de neem en las hojas y tallos de la planta");
+            dbManager.insertarTratamiento("\nHoja Sana", "No necesitas aplicar fungicidas");
+            dbManager.insertarTratamiento("\nHoja con Tizón Tardío", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
+            dbManager.insertarTratamiento("\nHoja con Tizón Temprano", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,19 +177,19 @@ public class MainActivity extends AppCompatActivity {
                     maxPos = i;
                 }
             }
-            String[] classes = {"Hoja pulguilla", "Hoja Sana", "Hoja con Tizon Tardio", "Hoja con Tizon Temprano"};
+            String[] classes = {"\nHoja con Pulguilla", "\nHoja Sana", "\nHoja con Tizón Tardío", "\nHoja con Tizón Temprano"};
             String predictedClass = classes[maxPos];
 
             // Obtener tratamiento asociado a la enfermedad desde la base de datos
             String tratamiento = dbManager.obtenerTratamiento(predictedClass);
 
             // Formatear el resultado con precisión en porcentaje y mensaje adicional
-            String resultText = predictedClass + "\nPrecisión: " + String.format("%.2f", maxConfidence * 100) + "%\n";
+            String resultText = predictedClass + "\nPrecisión: " + String.format("%.2f", maxConfidence * 100) + "%";
 
             if (tratamiento != null) {
-                resultText += "Tratamiento: " + tratamiento;
+                resultText += "\n\nTratamiento: " + tratamiento;
             } else {
-                resultText += "No se encontró tratamiento en la base de datos.";
+                resultText += "\n\nNo se encontró tratamiento en la base de datos.";
             }
 
             result.setText(resultText);
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
-                    result.setText("Esto no parece un cultivo.");
+                    result.setText("Esto no parece ser una hoja de Papa.");
 //                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }

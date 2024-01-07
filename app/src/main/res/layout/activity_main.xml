@@ -75,11 +75,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="337dp"
-            android:layout_height="280dp"
-            android:src="@drawable/agricultor_celular_3"
+            android:layout_width="305dp"
+            android:layout_height="310dp"
+            android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:adjustViewBounds="true" />
+            android:src="@drawable/agricultor_celular_3" />
     </androidx.cardview.widget.CardView>
 
 
@@ -101,7 +101,7 @@
     <TextView
         android:id="@+id/result"
         android:layout_width="312dp"
-        android:layout_height="121dp"
+        android:layout_height="129dp"
         android:text=""
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -115,8 +115,8 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/ProgressBarStyle"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="306dp"
+        android:layout_height="7dp"
         android:max="100"
         android:progress="0"
         android:visibility="gone"
