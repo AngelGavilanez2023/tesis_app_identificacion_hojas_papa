@@ -177,23 +177,24 @@ public class MainActivity extends AppCompatActivity {
                     maxPos = i;
                 }
             }
-            String[] classes = {"Hola pulguilla","Hoja Sana", "Hoja con Tizon Tardio", "Hoja con Tizon Temprano"};
+            String[] classes = {"Hoja pulguilla", "Hoja Sana", "Hoja con Tizon Tardio", "Hoja con Tizon Temprano"};
             String predictedClass = classes[maxPos];
+
+            // Obtener tratamiento asociado a la enfermedad desde la base de datos
+            String tratamiento = dbManager.obtenerTratamiento(predictedClass);
 
             // Formatear el resultado con precisión en porcentaje y mensaje adicional
             String resultText = predictedClass + "\nPrecisión: " + String.format("%.2f", maxConfidence * 100) + "%\n";
 
-            //CODIGO TRATAMIENTOS
-//            if (predictedClass.equals("Hoja Sana")) {
-//                resultText += "No necesitas aplicar fungicidas";
-//            } else {
-//                resultText += "Necesitas aplicar fungicidas";
-//            }
+            if (tratamiento != null) {
+                resultText += "Tratamiento: " + tratamiento;
+            } else {
+                resultText += "No se encontró tratamiento en la base de datos.";
+            }
 
             result.setText(resultText);
-            //codigo nuevo barra de progreso aqui se presenta
-            float precisionPercentage = maxConfidence * 100;
 
+            float precisionPercentage = maxConfidence * 100;
             // Actualizar la barra de progreso con la precisión obtenida
             ProgressBar progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
