@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ public class ResultadosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultados);
+        // Establecer la barra de estado como transparente
+        getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
 
         // Obtener el intent que inició esta actividad
         Intent intent = getIntent();
