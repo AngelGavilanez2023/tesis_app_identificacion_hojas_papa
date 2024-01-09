@@ -37,7 +37,8 @@ android {
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
+    //com.google.android.material:material:1.9.0 //dependecia original para cambiar vistas
+    implementation("com.google.android.material:material:1.8.0") //nuevav dependencia para cambiar vistas
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
     implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")

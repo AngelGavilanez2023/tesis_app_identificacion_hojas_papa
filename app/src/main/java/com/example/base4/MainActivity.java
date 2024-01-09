@@ -23,6 +23,7 @@ import com.example.base4.ml.Model;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -47,16 +48,17 @@ public class MainActivity extends AppCompatActivity {
         // Establecer la barra de estado como transparente
         getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
 
-
         // Inicializar DBmanager
         dbManager = new DBmanager(this);
 
         camera = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
 
+        //Widget: android:id="@+id/result del activity_main.xml
         result = findViewById(R.id.result);
         imageView = findViewById(R.id.imageView);
 
+        //*********************************| Funcion Camara ]********************************************
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,14 +71,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //*********************************| Funcion Galeria |********************************************
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, 2); // Cambié el código de solicitud a 2
             }
-        });
+        });//Fin
 
+        //*********************************| BDD Tratamientos |********************************************
         try {
             // Abrir la base de datos para escritura
             dbManager.open();
@@ -94,18 +98,9 @@ public class MainActivity extends AppCompatActivity {
         }
         //fin codigo tratamiento con bbdd
 
-
-
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(cameraIntent, 1);
-            }
-        });
     }
 
-    //funcion para validar si la imagen capturada o cargada desde galeria es una hoja
+    //*********************************| Funcion Validar si es Hoja |********************************************
     boolean validarHoja(Bitmap image) {
         // verifica si la imagen tiene un área verde significativa
         int greenPixels = 0;
@@ -137,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    //*********************************| Funcion Clasificcion con Modelo.tflite |********************************************
     public void classifyImage(Bitmap image) {
         try {
             Model model = Model.newInstance(getApplicationContext());
@@ -195,10 +190,22 @@ public class MainActivity extends AppCompatActivity {
             result.setText(resultText);
 
             float precisionPercentage = maxConfidence * 100;
+            //vista dos
+            // Calcular el progreso basado en la precisión obtenida
+            int progress = (int) precisionPercentage;
+            // Crear un Intent para pasar a la ResultadosActivity
+            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+
             // Actualizar la barra de progreso con la precisión obtenida
             ProgressBar progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress((int) precisionPercentage);
+
+            //vista dos
+            // Pasar el progreso como extra al Intent
+            resultadosIntent.putExtra("progress", progress);
+            // Iniciar la actividad ResultadosActivity
+            startActivity(resultadosIntent);
 
             // Liberar los recursos del modelo si ya no son utilizados.
             model.close();
@@ -208,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             // Manejar la excepción de puntero nulo si ocurre
         }
     }
-
+    //*********************************| FIN Clasificacion con Modelo.tflite |********************************************
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
@@ -223,6 +230,20 @@ public class MainActivity extends AppCompatActivity {
                 // Verificar si la imagen parece ser una hoja antes de clasificar
                 if (validarHoja(image)) {
                     classifyImage(image);
+                    // Crear un Intent para pasar a la ResultadosActivity
+                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+
+                    // Pasar los datos a la ResultadosActivity
+                    resultadosIntent.putExtra("resultado", result.getText().toString());
+
+                    // Convertir la imagen a un formato que se pueda pasar a través del Intent (en este caso, se convierte a un byte array)
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    resultadosIntent.putExtra("imagen", byteArray);
+
+                    // Iniciar la actividad ResultadosActivity
+                    startActivity(resultadosIntent);
                 } else {
                     result.setText("Esto no parece un cultivo.");
 //                    progressBar.setVisibility(View.INVISIBLE);
@@ -242,6 +263,21 @@ public class MainActivity extends AppCompatActivity {
                 // Verificar si la imagen parece ser una hoja antes de clasificar
                 if (validarHoja(image)) {
                     classifyImage(image);
+
+                    //segunda vista
+                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+
+                    // Pasar los datos a la ResultadosActivity
+                    resultadosIntent.putExtra("resultado", result.getText().toString());
+
+                    // Convertir la imagen a un formato que se pueda pasar a través del Intent (en este caso, se convierte a un byte array)
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    resultadosIntent.putExtra("imagen", byteArray);
+
+                    // Iniciar la actividad ResultadosActivity
+                    startActivity(resultadosIntent);
                 } else {
                     result.setText("Esto no parece ser una hoja de Papa.");
 //                    progressBar.setVisibility(View.INVISIBLE);
