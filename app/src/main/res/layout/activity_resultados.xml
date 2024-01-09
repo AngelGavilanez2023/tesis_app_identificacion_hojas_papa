@@ -29,39 +29,23 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_camera"
-        android:text="Tomar foto"
-        android:textAllCaps="false"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        android:backgroundTint="#8EB534"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.837" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_galeria"
-        android:text="Abrir Galería"
+        android:backgroundTint="#8EB534"
+        android:drawableLeft="@drawable/ic_volver"
+        android:text="Volver"
         android:textAllCaps="false"
         android:textSize="19sp"
         android:textStyle="bold"
-        android:backgroundTint="#8EB534"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937" />
+        app:layout_constraintVertical_bias="0.859" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
