@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ResultadosActivity extends AppCompatActivity {
@@ -36,7 +37,19 @@ public class ResultadosActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imagen);
 
+        //**********************************| Metodo para volver al Main Vista Uno CON FLECHA VOLVER|******************************
+        // Obtener el LinearLayout del encabezado
+        LinearLayout headerLayout = findViewById(R.id.headerLayout);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear un Intent para regresar a la MainActivity
+                Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        //**********************************| Metodo para volver al Main Vista Uno CON BOTON VOLVER|******************************
         Button buttonBack = findViewById(R.id.button2);
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +61,7 @@ public class ResultadosActivity extends AppCompatActivity {
         });
 
     }
+    //**********************************| Metodo cambia foto actual a la de defecto |******************************
     //metodo que cambia la imagen del modelo a la imagen por defecto
     @Override
     public void onBackPressed() {
