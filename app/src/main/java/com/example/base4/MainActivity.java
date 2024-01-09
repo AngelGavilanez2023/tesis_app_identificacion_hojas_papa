@@ -229,7 +229,18 @@ public class MainActivity extends AppCompatActivity {
                 if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
-                    result.setText("Esto no parece un cultivo.");
+                    // Mostrar mensaje y enviar imagen a ResultadosActivity
+                    String errorMessage = "\nEsto no parece ser una hoja de Papa.";
+                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+                    resultadosIntent.putExtra("resultado", errorMessage);
+
+                    // Convertir la imagen a un array de bytes
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    resultadosIntent.putExtra("imagen", byteArray);
+
+                    startActivity(resultadosIntent);
                 }
             } else {
                 Uri dat = data.getData();
