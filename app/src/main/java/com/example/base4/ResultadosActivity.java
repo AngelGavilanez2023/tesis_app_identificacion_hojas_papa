@@ -30,5 +30,13 @@ public class ResultadosActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imagen);
+
+    }
+    //metodo que cambia la imagen del modelo a la imagen por defecto
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -130,9 +130,13 @@ public class MainActivity extends AppCompatActivity {
         return greenRatio > threshold;
     }
 
-
+    //*********************************| Cambiar foto del modelo por la de defecto |********************************************
+    public void resetDefaultImage() {
+        imageView.setImageResource(R.drawable.agricultor_celular_3);
+    }
 
     //*********************************| Funcion Clasificcion con Modelo.tflite |********************************************
+
     public void classifyImage(Bitmap image) {
         try {
             Model model = Model.newInstance(getApplicationContext());
@@ -187,27 +191,13 @@ public class MainActivity extends AppCompatActivity {
                 resultText += "\n\nNo se encontró tratamiento en la base de datos.";
             }
 
-//            result.setText(resultText);
 
             float precisionPercentage = maxConfidence * 100;
             //vista dos
             // Calcular el progreso basado en la precisión obtenida
             int progress = (int) precisionPercentage;
             // Crear un Intent para pasar a la ResultadosActivity
-//            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class); nuevo barra 1
 
-            // Actualizar la barra de progreso con la precisión obtenida
-//      original      ProgressBar progressBar = findViewById(R.id.progressBar);
-//      original      progressBar.setVisibility(View.VISIBLE);
-//      original      progressBar.setProgress((int) precisionPercentage);
-
-            //vista dos
-            // Pasar el progreso como extra al Intent
-//            resultadosIntent.putExtra("progress", progress); nuevo barra 2
-            // Iniciar la actividad ResultadosActivity
-//            startActivity(resultadosIntent); nuevo barra 3
-
-            // Liberar los recursos del modelo si ya no son utilizados.
 
             // Intent para pasar a ResultadosActivity
             Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
