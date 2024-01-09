@@ -187,27 +187,38 @@ public class MainActivity extends AppCompatActivity {
                 resultText += "\n\nNo se encontró tratamiento en la base de datos.";
             }
 
-            result.setText(resultText);
+//            result.setText(resultText);
 
             float precisionPercentage = maxConfidence * 100;
             //vista dos
             // Calcular el progreso basado en la precisión obtenida
             int progress = (int) precisionPercentage;
             // Crear un Intent para pasar a la ResultadosActivity
-            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+//            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class); nuevo barra 1
 
             // Actualizar la barra de progreso con la precisión obtenida
-            ProgressBar progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-            progressBar.setProgress((int) precisionPercentage);
+//      original      ProgressBar progressBar = findViewById(R.id.progressBar);
+//      original      progressBar.setVisibility(View.VISIBLE);
+//      original      progressBar.setProgress((int) precisionPercentage);
 
             //vista dos
             // Pasar el progreso como extra al Intent
-            resultadosIntent.putExtra("progress", progress);
+//            resultadosIntent.putExtra("progress", progress); nuevo barra 2
             // Iniciar la actividad ResultadosActivity
-            startActivity(resultadosIntent);
+//            startActivity(resultadosIntent); nuevo barra 3
 
             // Liberar los recursos del modelo si ya no son utilizados.
+
+            // Intent para pasar a ResultadosActivity
+            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+            resultadosIntent.putExtra("resultado", resultText);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            resultadosIntent.putExtra("imagen", byteArray);
+            // Iniciar ResultadosActivity solo si la imagen es una hoja
+            startActivity(resultadosIntent);
             model.close();
         } catch (IOException e) {
             // Manejar la excepción
@@ -223,30 +234,12 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
                 int dimension = Math.min(image.getWidth(), image.getHeight());
                 image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                imageView.setImageBitmap(image);
-
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
-                // Verificar si la imagen parece ser una hoja antes de clasificar
                 if (validarHoja(image)) {
                     classifyImage(image);
-                    // Crear un Intent para pasar a la ResultadosActivity
-                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-
-                    // Pasar los datos a la ResultadosActivity
-                    resultadosIntent.putExtra("resultado", result.getText().toString());
-
-                    // Convertir la imagen a un formato que se pueda pasar a través del Intent (en este caso, se convierte a un byte array)
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    resultadosIntent.putExtra("imagen", byteArray);
-
-                    // Iniciar la actividad ResultadosActivity
-                    startActivity(resultadosIntent);
                 } else {
                     result.setText("Esto no parece un cultivo.");
-//                    progressBar.setVisibility(View.INVISIBLE);
                 }
             } else {
                 Uri dat = data.getData();
@@ -257,30 +250,12 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 imageView.setImageBitmap(image);
-
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
-                // Verificar si la imagen parece ser una hoja antes de clasificar
                 if (validarHoja(image)) {
                     classifyImage(image);
-
-                    //segunda vista
-                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-
-                    // Pasar los datos a la ResultadosActivity
-                    resultadosIntent.putExtra("resultado", result.getText().toString());
-
-                    // Convertir la imagen a un formato que se pueda pasar a través del Intent (en este caso, se convierte a un byte array)
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    resultadosIntent.putExtra("imagen", byteArray);
-
-                    // Iniciar la actividad ResultadosActivity
-                    startActivity(resultadosIntent);
                 } else {
                     result.setText("Esto no parece ser una hoja de Papa.");
-//                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         }
