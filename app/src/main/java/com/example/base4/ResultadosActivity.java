@@ -1,11 +1,11 @@
 package com.example.base4;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ResultadosActivity extends AppCompatActivity {
 
@@ -28,15 +29,25 @@ public class ResultadosActivity extends AppCompatActivity {
 
         // Obtener los datos pasados desde MainActivity
         String resultado = intent.getStringExtra("resultado");
-        float precision = intent.getFloatExtra("precision", 0.0f);  // Obtener la precisión del intent
+        float precision = intent.getFloatExtra("precision", 0.0f);
         byte[] byteArray = intent.getByteArrayExtra("imagen");
         Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
-        //barra de progreso
+        // Barra de progreso
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setProgress((int) precision);
-        // Cambiar la visibilidad de la barra de progreso a VISIBLE
+
+        // Obtener el color de la barra de progreso del estilo
+        TypedArray ta = obtainStyledAttributes(R.style.ProgressBarStyle, new int[]{android.R.attr.progressDrawable});
+        Drawable progressDrawable = ta.getDrawable(0);
+        ta.recycle();
+
+        // Configurar el progreso con el estilo personalizado
+        progressBar.setProgressDrawable(progressDrawable);
+
+        // Cambiar la visibilidad de la barra de progreso
         progressBar.setVisibility(View.VISIBLE);
+
         // Asignar los datos a los elementos de la interfaz de usuario en ResultadosActivity
         TextView resultadoTextView = findViewById(R.id.result);
         resultadoTextView.setText(resultado);
@@ -44,32 +55,28 @@ public class ResultadosActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imagen);
 
-        //**********************************| Metodo para volver al Main Vista Uno CON FLECHA VOLVER|******************************
-        // Obtener el LinearLayout del encabezado
+        // Metodo para volver al Main Vista Uno CON FLECHA VOLVER
         LinearLayout headerLayout = findViewById(R.id.headerLayout);
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear un Intent para regresar a la MainActivity
                 Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
 
-        //**********************************| Metodo para volver al Main Vista Uno CON BOTON VOLVER|******************************
+        // Metodo para volver al Main Vista Uno CON BOTON VOLVER
         Button buttonBack = findViewById(R.id.button2);
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear un Intent para regresar a la MainActivity
                 Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
-
     }
-    //**********************************| Metodo cambia foto actual a la de defecto |******************************
-    //metodo que cambia la imagen del modelo a la imagen por defecto
+
+    // Metodo que cambia la imagen del modelo a la imagen por defecto
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);

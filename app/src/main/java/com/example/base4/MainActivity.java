@@ -207,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
             image.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             resultadosIntent.putExtra("imagen", byteArray);
+
+
+            // Pasar la precisión como un extra en el Intent
+            resultadosIntent.putExtra("precision", precisionPercentage);
+
             // Iniciar ResultadosActivity solo si la imagen es una hoja
             startActivity(resultadosIntent);
             model.close();
