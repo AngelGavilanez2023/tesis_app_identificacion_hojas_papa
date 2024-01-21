@@ -217,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //*********************************| FIN Clasificacion con Modelo.tflite |********************************************
+
+    //*********************************| Metodo de Resultados capturados hacia la Vista Dos (resultadosActivity) |********************************************
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
+                    //CUANDO TOMA FOTOS DESDE LA CAMARA pasa a la vista dos
                     // Mostrar mensaje y enviar imagen a ResultadosActivity
                     String errorMessage = "\nEsto no parece ser una hoja de Papa.";
                     Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
@@ -256,7 +259,17 @@ public class MainActivity extends AppCompatActivity {
                 if (validarHoja(image)) {
                     classifyImage(image);
                 } else {
-                    result.setText("Esto no parece ser una hoja de Papa.");
+                    //CUANDO TOMA FOTOS DESDE LA GALERIA pasa a la vista dos
+                    String errorMessage = "\nEsto no parece ser una hoja de Papa.";
+                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+                    resultadosIntent.putExtra("resultado", errorMessage);
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    resultadosIntent.putExtra("imagen", byteArray);
+
+                    startActivity(resultadosIntent);
                 }
             }
         }

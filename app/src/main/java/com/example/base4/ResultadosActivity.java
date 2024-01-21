@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ResultadosActivity extends AppCompatActivity {
@@ -27,9 +28,15 @@ public class ResultadosActivity extends AppCompatActivity {
 
         // Obtener los datos pasados desde MainActivity
         String resultado = intent.getStringExtra("resultado");
+        float precision = intent.getFloatExtra("precision", 0.0f);  // Obtener la precisión del intent
         byte[] byteArray = intent.getByteArrayExtra("imagen");
         Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
+        //barra de progreso
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar.setProgress((int) precision);
+        // Cambiar la visibilidad de la barra de progreso a VISIBLE
+        progressBar.setVisibility(View.VISIBLE);
         // Asignar los datos a los elementos de la interfaz de usuario en ResultadosActivity
         TextView resultadoTextView = findViewById(R.id.result);
         resultadoTextView.setText(resultado);
