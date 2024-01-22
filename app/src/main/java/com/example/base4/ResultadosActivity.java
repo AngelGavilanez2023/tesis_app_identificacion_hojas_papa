@@ -35,7 +35,15 @@ public class ResultadosActivity extends AppCompatActivity {
 
         // Barra de progreso
         ProgressBar progressBar = findViewById(R.id.progressBar);
-        progressBar.setProgress((int) precision);
+
+        if (precision > 0.0f) {
+            // Se detecta una hoja, configurar la visibilidad y el progreso de la barra
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgress((int) precision);
+        } else {
+            // No se detecta una hoja, ocultar la barra de progreso
+            progressBar.setVisibility(View.GONE);
+        }
 
         // Obtener el color de la barra de progreso del estilo
         TypedArray ta = obtainStyledAttributes(R.style.ProgressBarStyle, new int[]{android.R.attr.progressDrawable});
@@ -44,9 +52,6 @@ public class ResultadosActivity extends AppCompatActivity {
 
         // Configurar el progreso con el estilo personalizado
         progressBar.setProgressDrawable(progressDrawable);
-
-        // Cambiar la visibilidad de la barra de progreso
-        progressBar.setVisibility(View.VISIBLE);
 
         // Asignar los datos a los elementos de la interfaz de usuario en ResultadosActivity
         TextView resultadoTextView = findViewById(R.id.result);
