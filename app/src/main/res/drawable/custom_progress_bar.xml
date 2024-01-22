@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/imageView">
         <shape android:shape="rectangle">
@@ -13,15 +14,13 @@
         </shape>
     </item>
     <item android:id="@android:id/progress">
-        <clip>
-            <scale
-                android:scaleWidth="100%"
-                android:useLevel="true">
-                <shape android:shape="rectangle">
-                    <solid android:color="#8EB534" />
-                    <corners android:radius="40dp" />
-                </shape>
-            </scale>
-        </clip>
+        <scale
+            android:scaleWidth="50%"
+            android:useLevel="false">
+            <shape android:shape="rectangle">
+                <solid android:color="#8EB534" />
+                <corners android:radius="40dp" />
+            </shape>
+        </scale>
     </item>
 </layer-list>
