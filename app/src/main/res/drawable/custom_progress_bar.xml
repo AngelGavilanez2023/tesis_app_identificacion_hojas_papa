@@ -2,20 +2,26 @@
     <item android:id="@+id/imageView">
         <shape android:shape="rectangle">
             <!-- Establecer el radio para esquinas redondeadas -->
+            <corners android:radius="40dp" />
             <solid android:color="@android:color/transparent" /> <!-- Color de fondo transparente -->
         </shape>
     </item>
     <item android:id="@android:id/background">
         <shape>
             <solid android:color="#E0E0E0" />
+            <corners android:radius="40dp" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
         <clip>
-            <shape>
-                <solid android:color="#8EB534" />
-                <size android:width="20dp" android:height="20dp" />
-            </shape>
+            <scale
+                android:scaleWidth="100%"
+                android:useLevel="true">
+                <shape android:shape="rectangle">
+                    <solid android:color="#8EB534" />
+                    <corners android:radius="40dp" />
+                </shape>
+            </scale>
         </clip>
     </item>
 </layer-list>
