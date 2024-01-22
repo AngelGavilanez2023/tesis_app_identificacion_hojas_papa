@@ -55,32 +55,18 @@ public class ResultadosActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imagen);
 
-        // Metodo para volver al Main Vista Uno CON FLECHA VOLVER
+        // Gestionar clics para volver a la actividad anterior (MainActivity)
         LinearLayout headerLayout = findViewById(R.id.headerLayout);
-        headerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Metodo para volver al Main Vista Uno CON BOTON VOLVER
         Button buttonBack = findViewById(R.id.button2);
-        buttonBack.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener backClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();  // Finalizar la actividad actual
             }
-        });
-    }
+        };
 
-    // Metodo que cambia la imagen del modelo a la imagen por defecto
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        headerLayout.setOnClickListener(backClickListener);
+        buttonBack.setOnClickListener(backClickListener);
     }
 }

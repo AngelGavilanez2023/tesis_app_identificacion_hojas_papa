@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         gallery = findViewById(R.id.button2);
 
         //Widget: android:id="@+id/result del activity_main.xml
-        result = findViewById(R.id.result);
         imageView = findViewById(R.id.imageView);
 
         //*********************************| Funcion Camara ]********************************************
@@ -135,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
         imageView.setImageResource(R.drawable.agricultor_celular_3);
     }
 
+    //*********************************| Establecer imagen predeterminada |********************************************
+    public void setDefaultImage() {
+        imageView.setImageResource(R.drawable.agricultor_celular_3);
+    }
     //*********************************| Funcion Clasificcion con Modelo.tflite |********************************************
 
     public void classifyImage(Bitmap image) {
@@ -208,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
             byte[] byteArray = stream.toByteArray();
             resultadosIntent.putExtra("imagen", byteArray);
 
+            // Llamar al método para establecer la imagen predeterminada
+            setDefaultImage();
+
 
             // Pasar la precisión como un extra en el Intent
             resultadosIntent.putExtra("precision", precisionPercentage);
@@ -248,6 +254,10 @@ public class MainActivity extends AppCompatActivity {
                     byte[] byteArray = stream.toByteArray();
                     resultadosIntent.putExtra("imagen", byteArray);
 
+
+                    // Llamar al método para establecer la imagen predeterminada
+                    setDefaultImage();
+
                     startActivity(resultadosIntent);
                 }
             } else {
@@ -274,11 +284,15 @@ public class MainActivity extends AppCompatActivity {
                     byte[] byteArray = stream.toByteArray();
                     resultadosIntent.putExtra("imagen", byteArray);
 
+
+
+                    // Llamar al método para establecer la imagen predeterminada
+                    setDefaultImage();
+
                     startActivity(resultadosIntent);
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }
