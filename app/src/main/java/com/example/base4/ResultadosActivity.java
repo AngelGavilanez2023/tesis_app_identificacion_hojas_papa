@@ -15,12 +15,34 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import com.example.base4.DB.DBmanager;
+
+
 public class ResultadosActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultados);
+
+        //boton de guardar
+// Encuentra la referencia del botón
+        Button btnGuardar = findViewById(R.id.btnGuardar);
+
+// Agrega un Listener al botón para manejar el evento de clic
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Llama al método para guardar los datos en la base de datos
+                guardarDatosEnBaseDeDatos();
+            }
+        });
+
         // Establecer la barra de estado como transparente
         getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
 
@@ -28,8 +50,9 @@ public class ResultadosActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         // Obtener los datos pasados desde MainActivity
-        String resultado = intent.getStringExtra("resultado");
+        String diseaseName = intent.getStringExtra("diseaseName");
         float precision = intent.getFloatExtra("precision", 0.0f);
+        String treatment = intent.getStringExtra("treatment");
         byte[] byteArray = intent.getByteArrayExtra("imagen");
         Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
@@ -54,8 +77,32 @@ public class ResultadosActivity extends AppCompatActivity {
         progressBar.setProgressDrawable(progressDrawable);
 
         // Asignar los datos a los elementos de la interfaz de usuario en ResultadosActivity
-        TextView resultadoTextView = findViewById(R.id.result);
-        resultadoTextView.setText(resultado);
+
+        // Mostrar el nombre de la enfermedad
+        TextView diseaseNameTextView = findViewById(R.id.diseaseName);
+        diseaseNameTextView.setText(diseaseName);
+
+        // Mostrar la precisión
+        TextView accuracyTextView = findViewById(R.id.accuracy);
+        accuracyTextView.setText(String.format("%.2f", precision) + "%");
+
+
+        //String diseaseName = intent.getStringExtra("diseaseName");
+        //float precision = intent.getFloatExtra("precision", 0.0f);
+        String aplicar = intent.getStringExtra("aplicar");
+        String modo = intent.getStringExtra("modo");
+        String fungicida = intent.getStringExtra("fungicida");
+        String dosis = intent.getStringExtra("dosis");
+        //byte[] byteArray = intent.getByteArrayExtra("imagen");
+        //Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+
+
+        // Mostrar el tratamiento
+        TextView treatmentTextView = findViewById(R.id.treatment);
+        //treatmentTextView.setText(treatment);
+        treatmentTextView.setText("APLICAR: " + aplicar + "\nMODO: " + modo + "\nFUNGICIDA: " + fungicida + "\nDOSIS: " + dosis);
+
 
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imagen);
@@ -63,6 +110,17 @@ public class ResultadosActivity extends AppCompatActivity {
         // Gestionar clics para volver a la actividad anterior (MainActivity)
         LinearLayout headerLayout = findViewById(R.id.headerLayout);
         Button buttonBack = findViewById(R.id.button2);
+
+        // Obtener la referencia al icono de retroceso en el AppBar
+        ImageView toolbarBackButton = findViewById(R.id.toolbarBackButton);
+
+        // Gestionar clics en el icono de retroceso del AppBar
+                toolbarBackButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();  // Finalizar la actividad actual
+                    }
+                });
 
         View.OnClickListener backClickListener = new View.OnClickListener() {
             @Override
@@ -73,5 +131,47 @@ public class ResultadosActivity extends AppCompatActivity {
 
         headerLayout.setOnClickListener(backClickListener);
         buttonBack.setOnClickListener(backClickListener);
+
     }
+
+    //funciones para guardar dando cliick en el boton de guardar
+    private void guardarDatosEnBaseDeDatos() {
+        // Obtener datos necesarios (por ejemplo, enfermedad, precisión, etc.) desde los extras o donde sea necesario
+        String enfermedad = getIntent().getStringExtra("diseaseName");
+        float precision = getIntent().getFloatExtra("precision", 0.0f);
+        // ... obtener otros datos necesarios ...
+
+        // Obtener instancia de DBmanager
+        DBmanager dbManager = new DBmanager(this);
+
+        try {
+            // Abrir la base de datos para escritura
+            dbManager.open();
+
+            // Llamar al método insertarResultado con los datos relevantes
+            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual());
+            // Puedes agregar más datos según sea necesario
+
+            // Mostrar mensaje de éxito o realizar otras acciones según sea necesario
+            Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejar la excepción (mostrar mensaje de error, registrar en el log, etc.)
+        } finally {
+            // Cerrar la base de datos
+            dbManager.close();
+        }
+    }
+
+    // Método para obtener la fecha y hora actual (puedes ajustarlo según tus necesidades)
+    private String obtenerFechaHoraActual() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+
+
+
 }
+

@@ -2,6 +2,7 @@ package com.example.base4;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,6 +30,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import com.example.base4.DB.DBmanager;
+import com.example.base4.modelo.Tratamiento;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 
@@ -48,6 +54,18 @@ public class MainActivity extends AppCompatActivity {
         // Establecer la barra de estado como transparente
         getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
 
+        Button btnMostrarResultados = findViewById(R.id.btnMostrarResultados);
+
+        // Desactivar el modo oscuro
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        btnMostrarResultados.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Iniciar la actividad MostrarResultadosActivity
+                Intent intent = new Intent(MainActivity.this, MostrarResultados.class);
+                startActivity(intent);
+            }
+        });
         // Inicializar DBmanager
         dbManager = new DBmanager(this);
 
@@ -84,10 +102,11 @@ public class MainActivity extends AppCompatActivity {
             // Abrir la base de datos para escritura
             dbManager.open();
             // Insertar datos de prueba
-            dbManager.insertarTratamiento("\nHoja con Pulguilla", "Aplicar aceite de neem en las hojas y tallos de la planta");
-            dbManager.insertarTratamiento("\nHoja Sana", "No necesitas aplicar fungicidas");
-            dbManager.insertarTratamiento("\nHoja con Tizón Tardío", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
-            dbManager.insertarTratamiento("\nHoja con Tizón Temprano", "Aplicar fungicida clorotalonil, mancozeb, o cimoxamil en las hojas");
+            dbManager.insertarTratamiento("\nPlaga Hoja con Pulguilla", "Aspersión, intervalo se seguridad 14 días.","Contacto, ingestión", "KUIK 90 PS","300g - 400g por hectárea" );
+            dbManager.insertarTratamiento("\nHoja Sana", "No necesitas aplicar fungicidas","SD","SD","SD");
+            dbManager.insertarTratamiento("\nEnfermedad Hoja con Tizón Tardío", "Aspersión, intervalo se seguridad 14 días.","Sistémico","ALLIETE","2.5 kg por hectárea");
+            dbManager.insertarTratamiento("\nEnfermedad Hoja con Tizón Temprano", "Asperción", "Contacto","CUPRAVIT","2kg - 4kg por hectárea");
+            //dbManager.insertarTratamiento("\nHoja con Pulguilla", "Aspersión","Contacto, ingestión, Sistémico", "FOLIMART","600ml - 900ml por hectárea" );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,36 +116,6 @@ public class MainActivity extends AppCompatActivity {
         }
         //fin codigo tratamiento con bbdd
 
-    }
-
-    //*********************************| Funcion Validar si es Hoja |********************************************
-    boolean validarHoja(Bitmap image) {
-        // verifica si la imagen tiene un área verde significativa
-        int greenPixels = 0;
-        int totalPixels = image.getWidth() * image.getHeight();
-
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int pixel = image.getPixel(x, y);
-                int red = (pixel >> 16) & 0xFF;
-                int green = (pixel >> 8) & 0xFF;
-                int blue = pixel & 0xFF;
-
-                // Si el componente verde es mayor que los demás, se considera un píxel verde
-                if (green > red && green > blue) {
-                    greenPixels++;
-                }
-            }
-        }
-
-        // Calcula la proporción de píxeles verdes en la imagen
-        double greenRatio = (double) greenPixels / totalPixels;
-
-        // Establece un umbral para definir si la imagen parece ser una hoja
-        // en un inicio se tenia esto threshold = 0.1; pero se aumento para una validacion mas robusta
-        double threshold = 0.3;
-
-        return greenRatio > threshold;
     }
 
     //*********************************| Cambiar foto del modelo por la de defecto |********************************************
@@ -179,44 +168,46 @@ public class MainActivity extends AppCompatActivity {
                     maxPos = i;
                 }
             }
-            String[] classes = {"\nHoja con Pulguilla", "\nHoja Sana", "\nHoja con Tizón Tardío", "\nHoja con Tizón Temprano"};
+            String[] classes = {"\nPlaga Hoja con Pulguilla", "\nHoja Sana", "\nEnfermedad Hoja con Tizón Tardío", "\nEnfermedad Hoja con Tizón Temprano"};
             String predictedClass = classes[maxPos];
 
             // Obtener tratamiento asociado a la enfermedad desde la base de datos
-            String tratamiento = dbManager.obtenerTratamiento(predictedClass);
+            Tratamiento tratamiento = dbManager.obtenerTratamiento(predictedClass);
 
             // Formatear el resultado con precisión en porcentaje y mensaje adicional
             String resultText = predictedClass + "\nPrecisión: " + String.format("%.2f", maxConfidence * 100) + "%";
 
             if (tratamiento != null) {
-                resultText += "\n\nTratamiento: " + tratamiento;
+                resultText += "\n\nTratamiento: " + tratamiento.getAplicar() + "\n" + tratamiento.getModo() + "\n" + tratamiento.getFungicida() + "\n" + tratamiento.getDosis();
             } else {
                 resultText += "\n\nNo se encontró tratamiento en la base de datos.";
             }
 
-
             float precisionPercentage = maxConfidence * 100;
-            //vista dos
-            // Calcular el progreso basado en la precisión obtenida
-            int progress = (int) precisionPercentage;
-            // Crear un Intent para pasar a la ResultadosActivity
 
+            // Mostrar los resultados en la pantalla (aquí puedes usar resultText)
 
-            // Intent para pasar a ResultadosActivity
+            // Llamar al método para establecer la imagen predeterminada
+            setDefaultImage();
+
+            // Pasar la precisión como un extra en el Intent
             Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-            resultadosIntent.putExtra("resultado", resultText);
+            resultadosIntent.putExtra("diseaseName", predictedClass);
+            resultadosIntent.putExtra("precision", precisionPercentage);
+
+            // Verificar si se obtuvo un tratamiento
+            if (tratamiento != null) {
+                // Si se obtuvo, pasar los atributos del tratamiento
+                resultadosIntent.putExtra("aplicar", tratamiento.getAplicar());
+                resultadosIntent.putExtra("modo", tratamiento.getModo());
+                resultadosIntent.putExtra("fungicida", tratamiento.getFungicida());
+                resultadosIntent.putExtra("dosis", tratamiento.getDosis());
+            }
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             resultadosIntent.putExtra("imagen", byteArray);
-
-            // Llamar al método para establecer la imagen predeterminada
-            setDefaultImage();
-
-
-            // Pasar la precisión como un extra en el Intent
-            resultadosIntent.putExtra("precision", precisionPercentage);
 
             // Iniciar ResultadosActivity solo si la imagen es una hoja
             startActivity(resultadosIntent);
@@ -227,42 +218,30 @@ public class MainActivity extends AppCompatActivity {
             // Manejar la excepción de puntero nulo si ocurre
         }
     }
+
+    // Método para obtener la fecha y hora actual en el formato deseado
+    private String obtenerFechaHoraActual() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
     //*********************************| FIN Clasificacion con Modelo.tflite |********************************************
 
     //*********************************| Metodo de Resultados capturados hacia la Vista Dos (resultadosActivity) |********************************************
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Bitmap image = null;  // Declarar la variable image al principio del método
+
         if (resultCode == RESULT_OK) {
             if (requestCode == 3) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
+                image = (Bitmap) data.getExtras().get("data");
                 int dimension = Math.min(image.getWidth(), image.getHeight());
                 image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
-                if (validarHoja(image)) {
-                    classifyImage(image);
-                } else {
-                    //CUANDO TOMA FOTOS DESDE LA CAMARA pasa a la vista dos
-                    // Mostrar mensaje y enviar imagen a ResultadosActivity
-                    String errorMessage = "\nEsto no parece ser una hoja de Papa.";
-                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-                    resultadosIntent.putExtra("resultado", errorMessage);
-
-                    // Convertir la imagen a un array de bytes
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    resultadosIntent.putExtra("imagen", byteArray);
-
-
-                    // Llamar al método para establecer la imagen predeterminada
-                    setDefaultImage();
-
-                    startActivity(resultadosIntent);
-                }
+                // Eliminado el uso de validarHoja
+                classifyImage(image);
             } else {
                 Uri dat = data.getData();
-                Bitmap image = null;
                 try {
                     image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
                 } catch (IOException e) {
@@ -271,28 +250,29 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageBitmap(image);
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
 
-                if (validarHoja(image)) {
-                    classifyImage(image);
-                } else {
-                    //CUANDO TOMA FOTOS DESDE LA GALERIA pasa a la vista dos
-                    String errorMessage = "\nEsto no parece ser una hoja de Papa.";
-                    Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-                    resultadosIntent.putExtra("resultado", errorMessage);
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    resultadosIntent.putExtra("imagen", byteArray);
-
-
-
-                    // Llamar al método para establecer la imagen predeterminada
-                    setDefaultImage();
-
-                    startActivity(resultadosIntent);
-                }
+                // Eliminado el uso de validarHoja
+                classifyImage(image);
             }
+        } else {
+            // Eliminado el uso de validarHoja
+            String errorMessage = "\nEsto no parece ser una hoja de Papa.";
+            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+            resultadosIntent.putExtra("diseaseName", errorMessage);
+
+            // Convertir la imagen a un array de bytes
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            resultadosIntent.putExtra("imagen", byteArray);
+
+            // Llamar al método para establecer la imagen predeterminada
+            setDefaultImage();
+
+            startActivity(resultadosIntent);
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

@@ -18,12 +18,14 @@ public class DBconexion extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(DBmanager.TABLE_TRATAMIENTOS_CREATE);
+        sqLiteDatabase.execSQL(DBmanager.TABLE_RESULTADOS_CREATE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DBmanager.TABLE_TRATAMIENTO);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DBmanager.TABLE_RESULTADOS);
 
     }
 
