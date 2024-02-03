@@ -111,22 +111,30 @@ public class DBmanager {
     public static final String ENFERMEDAD_RESULTADO = "enfermedad";
     public static final String ACCURACY_RESULTADO = "accuracy";
     public static final String FECHA_HORA_RESULTADO = "fecha_hora";
+    public static final String IMAGEN_RESULTADO = "imagen";  // Cambiado de IMAGEN_RESULTADO_PATH a IMAGEN_RESULTADO
+    public static final String TRATAMIENTO_RESULTADO = "tratamiento"; // Nuevo campo para tratamiento
+
 
     public static final String TABLE_RESULTADOS_CREATE = "CREATE TABLE resultados (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "enfermedad TEXT," +
             "accuracy REAL," +
-            "fecha_hora TEXT)";
+            "fecha_hora TEXT," +
+            "imagen BLOB," +
+            "tratamiento TEXT)";  // Nuevo campo para tratamiento
 
-
-    public void insertarResultado(String enfermedad, float accuracy, String fechaHora) {
+    public void insertarResultado(String enfermedad, float accuracy, String fechaHora, byte[] imagen, String tratamiento) {
         ContentValues cv = new ContentValues();
         cv.put(ENFERMEDAD_RESULTADO, enfermedad);
         cv.put(ACCURACY_RESULTADO, accuracy);
         cv.put(FECHA_HORA_RESULTADO, fechaHora);
+        cv.put(IMAGEN_RESULTADO, imagen);
+        cv.put(TRATAMIENTO_RESULTADO, tratamiento);  // Nuevo campo para tratamiento
         this._basededatos.insert(TABLE_RESULTADOS, null, cv);
         Log.d("inserción resultado", "correcta");
     }
+
+
 
     //obtnener todos los resultados de la bbdd
     public ArrayList<Resultados> obtenerTodosResultados() {
@@ -137,7 +145,7 @@ public class DBmanager {
             SQLiteDatabase db = _conexion.getReadableDatabase();
 
             // Realizar la consulta para obtener los resultados
-            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO};
+            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO, IMAGEN_RESULTADO, TRATAMIENTO_RESULTADO};  // Nuevo campo para tratamiento
 
             Cursor cursor = db.query(TABLE_RESULTADOS, columnas, null, null, null, null, null);
 
@@ -147,14 +155,19 @@ public class DBmanager {
                 int enfermedadIndex = cursor.getColumnIndex(ENFERMEDAD_RESULTADO);
                 int accuracyIndex = cursor.getColumnIndex(ACCURACY_RESULTADO);
                 int fechaHoraIndex = cursor.getColumnIndex(FECHA_HORA_RESULTADO);
+                int imagenIndex = cursor.getColumnIndex(IMAGEN_RESULTADO); // Cambiado de imagenPathIndex a imagenIndex
+                int tratamientoIndex = cursor.getColumnIndex(TRATAMIENTO_RESULTADO);  // Nuevo campo para tratamiento
 
                 do {
                     int id = cursor.getInt(idIndex);
                     String enfermedad = cursor.getString(enfermedadIndex);
                     float accuracy = cursor.getFloat(accuracyIndex);
                     String fechaHora = cursor.getString(fechaHoraIndex);
+                    byte[] imagenBytes = cursor.getBlob(imagenIndex); // Cambiado de getString a getBlob
+                    String tratamiento = cursor.getString(tratamientoIndex);  // Nuevo campo para tratamiento
 
-                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora);
+
+                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora, imagenBytes, tratamiento);  // Nuevo campo para tratamiento
                     resultados.add(resultado);
                 } while (cursor.moveToNext());
             }
@@ -167,5 +180,6 @@ public class DBmanager {
 
         return resultados;
     }
+
 
 }

@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
             Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
             resultadosIntent.putExtra("diseaseName", predictedClass);
             resultadosIntent.putExtra("precision", precisionPercentage);
+            resultadosIntent.putExtra("treatment", resultText);
 
             // Verificar si se obtuvo un tratamiento
             if (tratamiento != null) {

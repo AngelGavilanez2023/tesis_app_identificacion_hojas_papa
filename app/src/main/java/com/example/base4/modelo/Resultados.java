@@ -5,12 +5,16 @@ public class Resultados {
     String enfermedad;
     String accuracy;
     String fecha_hora;
+    byte[] imagen; // Cambiado de String a byte[] para almacenar la imagen directamente
+    String tratamiento; // Nuevo campo para tratamiento
 
-    public Resultados(int id, String enfermedad, String accuracy, String fecha_hora) {
+    public Resultados(int id, String enfermedad, String accuracy, String fecha_hora, byte[] imagen, String tratamiento) {
         this.id = id;
         this.enfermedad = enfermedad;
         this.accuracy = accuracy;
         this.fecha_hora = fecha_hora;
+        this.imagen = imagen;
+        this.tratamiento = tratamiento;
     }
 
     public int getId() {
@@ -43,5 +47,21 @@ public class Resultados {
 
     public void setFecha_hora(String fecha_hora) {
         this.fecha_hora = fecha_hora;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getTratamiento() {
+        return tratamiento;
+    }
+
+    public void setTratamiento(String tratamiento) {
+        this.tratamiento = tratamiento;
     }
 }

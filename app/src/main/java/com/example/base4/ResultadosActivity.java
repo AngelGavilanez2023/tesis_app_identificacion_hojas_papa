@@ -17,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -30,11 +34,25 @@ public class ResultadosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultados);
 
+        // Obtener la ruta del directorio interno de la aplicación
+        //String rutaDirectorioInterno = getFilesDir() + "/images";
+        String rutaDirectorioExterno = getExternalFilesDir(null) + "/images";
+
+
+        // Crear el directorio si no existe
+        //File directorioInterno = new File(rutaDirectorioInterno);
+        File directorioExterno = new File(rutaDirectorioExterno);
+
+
+        if (!directorioExterno.exists()) {
+            directorioExterno.mkdirs();
+        }
+
         //boton de guardar
-// Encuentra la referencia del botón
+        // Encuentra la referencia del botón
         Button btnGuardar = findViewById(R.id.btnGuardar);
 
-// Agrega un Listener al botón para manejar el evento de clic
+        // Agrega un Listener al botón para manejar el evento de clic
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +73,7 @@ public class ResultadosActivity extends AppCompatActivity {
         String treatment = intent.getStringExtra("treatment");
         byte[] byteArray = intent.getByteArrayExtra("imagen");
         Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
 
         // Barra de progreso
         ProgressBar progressBar = findViewById(R.id.progressBar);
@@ -93,6 +112,7 @@ public class ResultadosActivity extends AppCompatActivity {
         String modo = intent.getStringExtra("modo");
         String fungicida = intent.getStringExtra("fungicida");
         String dosis = intent.getStringExtra("dosis");
+        String tratamiento = intent.getStringExtra("treatment");
         //byte[] byteArray = intent.getByteArrayExtra("imagen");
         //Bitmap imagen = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
@@ -135,11 +155,13 @@ public class ResultadosActivity extends AppCompatActivity {
     }
 
     //funciones para guardar dando cliick en el boton de guardar
+// Modifica esta parte en ResultadosActivity
     private void guardarDatosEnBaseDeDatos() {
-        // Obtener datos necesarios (por ejemplo, enfermedad, precisión, etc.) desde los extras o donde sea necesario
+        // Obtener datos necesarios desde los extras
         String enfermedad = getIntent().getStringExtra("diseaseName");
         float precision = getIntent().getFloatExtra("precision", 0.0f);
-        // ... obtener otros datos necesarios ...
+        byte[] byteArray = getIntent().getByteArrayExtra("imagen");
+        String tratamiento = getIntent().getStringExtra("treatment"); // Nuevo campo para tratamiento
 
         // Obtener instancia de DBmanager
         DBmanager dbManager = new DBmanager(this);
@@ -149,8 +171,7 @@ public class ResultadosActivity extends AppCompatActivity {
             dbManager.open();
 
             // Llamar al método insertarResultado con los datos relevantes
-            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual());
-            // Puedes agregar más datos según sea necesario
+            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento);
 
             // Mostrar mensaje de éxito o realizar otras acciones según sea necesario
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
@@ -162,6 +183,7 @@ public class ResultadosActivity extends AppCompatActivity {
             dbManager.close();
         }
     }
+
 
     // Método para obtener la fecha y hora actual (puedes ajustarlo según tus necesidades)
     private String obtenerFechaHoraActual() {

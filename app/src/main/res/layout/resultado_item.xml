@@ -42,6 +42,14 @@
             android:layout_weight="1"
             android:text="Fecha"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fotoHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Foto"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <View
@@ -86,6 +94,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="5dp" />
+
+            <ImageView
+                android:id="@+id/imagenResultado"
+                android:layout_width="50sp"
+                android:layout_height="100sp"
+                android:layout_below="@+id/divider"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="Imagen de resultado"></ImageView>
         </TableRow>
 
     </TableLayout>
