@@ -113,6 +113,7 @@ public class DBmanager {
     public static final String FECHA_HORA_RESULTADO = "fecha_hora";
     public static final String IMAGEN_RESULTADO = "imagen";  // Cambiado de IMAGEN_RESULTADO_PATH a IMAGEN_RESULTADO
     public static final String TRATAMIENTO_RESULTADO = "tratamiento"; // Nuevo campo para tratamiento
+    public static final String DOSIS_RESULTADO = "dosis"; // Nuevo campo para tratamiento
 
 
     public static final String TABLE_RESULTADOS_CREATE = "CREATE TABLE resultados (" +
@@ -121,15 +122,17 @@ public class DBmanager {
             "accuracy REAL," +
             "fecha_hora TEXT," +
             "imagen BLOB," +
-            "tratamiento TEXT)";  // Nuevo campo para tratamiento
+            "tratamiento TEXT," +
+            "dosis TEXT)";  // Nuevo campo para tratamiento
 
-    public void insertarResultado(String enfermedad, float accuracy, String fechaHora, byte[] imagen, String tratamiento) {
+    public void insertarResultado(String enfermedad, float accuracy, String fechaHora, byte[] imagen, String tratamiento, String dosis) {
         ContentValues cv = new ContentValues();
         cv.put(ENFERMEDAD_RESULTADO, enfermedad);
         cv.put(ACCURACY_RESULTADO, accuracy);
         cv.put(FECHA_HORA_RESULTADO, fechaHora);
         cv.put(IMAGEN_RESULTADO, imagen);
         cv.put(TRATAMIENTO_RESULTADO, tratamiento);  // Nuevo campo para tratamiento
+        cv.put(DOSIS_RESULTADO, dosis);  // Nuevo campo para tratamiento
         this._basededatos.insert(TABLE_RESULTADOS, null, cv);
         Log.d("inserción resultado", "correcta");
     }
@@ -145,9 +148,9 @@ public class DBmanager {
             SQLiteDatabase db = _conexion.getReadableDatabase();
 
             // Realizar la consulta para obtener los resultados
-            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO, IMAGEN_RESULTADO, TRATAMIENTO_RESULTADO};  // Nuevo campo para tratamiento
+            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO, IMAGEN_RESULTADO, TRATAMIENTO_RESULTADO, DOSIS_RESULTADO};  // Nuevo campo para tratamiento
 
-            Cursor cursor = db.query(TABLE_RESULTADOS, columnas, null, null, null, null, null);
+            Cursor cursor = db.query(TABLE_RESULTADOS, columnas, null, null, null, null, null, null);
 
             // Verificar si se encontraron resultados
             if (cursor.moveToFirst()) {
@@ -157,6 +160,7 @@ public class DBmanager {
                 int fechaHoraIndex = cursor.getColumnIndex(FECHA_HORA_RESULTADO);
                 int imagenIndex = cursor.getColumnIndex(IMAGEN_RESULTADO); // Cambiado de imagenPathIndex a imagenIndex
                 int tratamientoIndex = cursor.getColumnIndex(TRATAMIENTO_RESULTADO);  // Nuevo campo para tratamiento
+                int dosisIndex = cursor.getColumnIndex(DOSIS_RESULTADO);  // Nuevo campo para tratamiento
 
                 do {
                     int id = cursor.getInt(idIndex);
@@ -165,9 +169,10 @@ public class DBmanager {
                     String fechaHora = cursor.getString(fechaHoraIndex);
                     byte[] imagenBytes = cursor.getBlob(imagenIndex); // Cambiado de getString a getBlob
                     String tratamiento = cursor.getString(tratamientoIndex);  // Nuevo campo para tratamiento
+                    String dosis = cursor.getString(dosisIndex);  // Nuevo campo para tratamiento
 
 
-                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora, imagenBytes, tratamiento);  // Nuevo campo para tratamiento
+                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora, imagenBytes, tratamiento, dosis);  // Nuevo campo para tratamiento
                     resultados.add(resultado);
                 } while (cursor.moveToNext());
             }

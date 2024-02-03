@@ -44,6 +44,8 @@ public class ResultadosAdapter extends RecyclerView.Adapter<ResultadosAdapter.Re
         holder.enfermedadTextView.setText(resultado.getEnfermedad());
         holder.accuracyTextView.setText(formattedPrecision + "%"); // Usar la precisión formateada
         holder.fechaHoraTextView.setText(resultado.getFecha_hora());
+        holder.tratamientoTextView.setText(resultado.getTratamiento()); // Mostrar el tratamiento
+        holder.dosisTextView.setText(resultado.getDosis()); // Mostrar la dosis
 
         // Cargar la imagen de manera asincrónica
         new LoadImageTask(holder.imagenImageView).execute(resultado.getImagen());
@@ -54,15 +56,18 @@ public class ResultadosAdapter extends RecyclerView.Adapter<ResultadosAdapter.Re
         public TextView enfermedadTextView;
         public TextView accuracyTextView;
         public TextView fechaHoraTextView;
+        public TextView tratamientoTextView; // Nuevo TextView para el tratamiento
+        public TextView dosisTextView; // Nuevo TextView para la dosis
         public ImageView imagenImageView;
 
         public ResultadoViewHolder(View view) {
             super(view);
-            //colocar id tambien
             textIdResultado = view.findViewById(R.id.textIdResultado);
             enfermedadTextView = view.findViewById(R.id.textEnfermedadResultado);
             accuracyTextView = view.findViewById(R.id.textAccuracyResultado);
             fechaHoraTextView = view.findViewById(R.id.textFechaHoraResultado);
+            tratamientoTextView = view.findViewById(R.id.textTratamientoResultado);
+            dosisTextView = view.findViewById(R.id.textDosisResultado); // Referencia al nuevo TextView
             imagenImageView = view.findViewById(R.id.imagenResultado);
         }
     }

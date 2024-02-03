@@ -50,6 +50,22 @@
             android:layout_weight="1"
             android:text="Foto"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nombreFungicidaHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fungificida"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nombreDosisHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dosis"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <View
@@ -97,12 +113,27 @@
 
             <ImageView
                 android:id="@+id/imagenResultado"
-                android:layout_width="50sp"
+                android:layout_width="30sp"
                 android:layout_height="100sp"
                 android:layout_below="@+id/divider"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="Imagen de resultado"></ImageView>
+
+            <TextView
+                android:id="@+id/textTratamientoResultado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/textDosisResultado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp" />
+
         </TableRow>
 
     </TableLayout>

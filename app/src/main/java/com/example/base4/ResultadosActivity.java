@@ -34,30 +34,27 @@ public class ResultadosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultados);
 
-        // Obtener la ruta del directorio interno de la aplicación
-        //String rutaDirectorioInterno = getFilesDir() + "/images";
-        String rutaDirectorioExterno = getExternalFilesDir(null) + "/images";
-
-
-        // Crear el directorio si no existe
-        //File directorioInterno = new File(rutaDirectorioInterno);
-        File directorioExterno = new File(rutaDirectorioExterno);
-
-
-        if (!directorioExterno.exists()) {
-            directorioExterno.mkdirs();
-        }
 
         //boton de guardar
         // Encuentra la referencia del botón
         Button btnGuardar = findViewById(R.id.btnGuardar);
 
         // Agrega un Listener al botón para manejar el evento de clic
+        // Agrega un Listener al botón para manejar el evento de clic y se regrea a la ventana principal
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Llama al método para guardar los datos en la base de datos
                 guardarDatosEnBaseDeDatos();
+
+                // Crea un Intent para abrir la actividad principal
+                Intent intent = new Intent(ResultadosActivity.this, MainActivity.class);
+
+                // Inicia la actividad principal
+                startActivity(intent);
+
+                // Cierra la actividad actual (ResultadosActivity)
+                finish();
             }
         });
 
@@ -161,7 +158,9 @@ public class ResultadosActivity extends AppCompatActivity {
         String enfermedad = getIntent().getStringExtra("diseaseName");
         float precision = getIntent().getFloatExtra("precision", 0.0f);
         byte[] byteArray = getIntent().getByteArrayExtra("imagen");
-        String tratamiento = getIntent().getStringExtra("treatment"); // Nuevo campo para tratamiento
+        String tratamiento = getIntent().getStringExtra("fungicida"); // Nuevo campo para tratamiento
+        //String modo = getIntent().getStringExtra("modo");
+        String dosis = getIntent().getStringExtra("dosis");
 
         // Obtener instancia de DBmanager
         DBmanager dbManager = new DBmanager(this);
@@ -171,7 +170,9 @@ public class ResultadosActivity extends AppCompatActivity {
             dbManager.open();
 
             // Llamar al método insertarResultado con los datos relevantes
-            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento);
+            //dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento);
+            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento, dosis);
+
 
             // Mostrar mensaje de éxito o realizar otras acciones según sea necesario
             Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();

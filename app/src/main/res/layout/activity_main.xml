@@ -97,7 +97,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="#8EB534"
         android:drawableLeft="@drawable/ic_result"
-        android:text="Mostrar Resultados"
+        android:text="Ver"
         android:textAllCaps="false"
         android:textSize="19sp"
         android:textStyle="bold"/>
