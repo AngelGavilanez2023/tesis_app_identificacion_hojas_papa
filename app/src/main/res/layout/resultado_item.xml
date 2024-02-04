@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:background="#B2B0B0">
 
         <TextView
             android:id="@+id/textHeaderId"
@@ -17,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="ID"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/textHeaderTipo"
@@ -25,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tipo"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/textHeaderPrecision"
@@ -33,15 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:text="Precisión"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textHeaderFechaHora"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Fecha"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/fotoHeader"
@@ -49,24 +45,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Foto"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="12sp"/>
+
 
         <TextView
-            android:id="@+id/nombreFungicidaHeader"
-            android:layout_width="0dp"
+            android:id="@+id/nombreAccionesHeader"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Fungificida"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/nombreDosisHeader"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Dosis"
-            android:textStyle="bold" />
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="12sp"/>
     </LinearLayout>
+
+
+
 
     <View
         android:id="@+id/divider"
@@ -88,28 +82,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:padding="5dp" />
+                android:padding="3dp" />
 
             <TextView
                 android:id="@+id/textEnfermedadResultado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp" />
+                android:padding="4dp" />
 
             <TextView
                 android:id="@+id/textAccuracyResultado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:padding="5dp" />
+                android:padding="4dp" />
 
-            <TextView
-                android:id="@+id/textFechaHoraResultado"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
 
             <ImageView
                 android:id="@+id/imagenResultado"
@@ -120,22 +108,138 @@
                 android:layout_centerHorizontal="true"
                 android:contentDescription="Imagen de resultado"></ImageView>
 
+            <!-- Agregar un botón de eliminar -->
+            <Button
+                android:id="@+id/btnEliminarResultado"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_eliminar"
+                android:text=""
+                android:onClick="eliminarResultado" />
+
+        </TableRow>
+
+
+        <LinearLayout
+            android:id="@+id/layoutHeader2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/nombreFungicidaHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fungificida:"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+
             <TextView
                 android:id="@+id/textTratamientoResultado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp" />
+                android:padding="0dp" />
+
+        </LinearLayout>
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/layoutHeader"
+            android:background="#808080" />
+
+        <LinearLayout
+            android:id="@+id/layoutHeader3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/nombreDosisHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dosis:"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/textDosisResultado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp" />
+                android:padding="0dp" />
+        </LinearLayout>
 
-        </TableRow>
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/layoutHeader"
+            android:background="#808080" />
+
+        <LinearLayout
+            android:id="@+id/layoutHeader5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/aplicarHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aplicar:"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/textAplicarResultado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="0dp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/layoutHeader"
+            android:background="#808080" />
+
+        <LinearLayout
+            android:id="@+id/layoutHeader4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textHeaderFechaHora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha y hora:"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textFechaHoraResultado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="4dp" />
+        </LinearLayout>
+
 
     </TableLayout>
+
+
+
+
 
 </RelativeLayout>

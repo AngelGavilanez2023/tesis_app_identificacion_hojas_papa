@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         mlModelBinding = true
+        viewBinding = true
     }
 }
 
@@ -47,8 +48,14 @@ dependencies {
     // dependencia de RecyclerView para mostrar la lista de elementos
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
+    implementation("com.itextpdf:itext7-core:7.1.15")
+
+    //dependencia de recyvlerView
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+
 
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    //dependencia de pdf
 }

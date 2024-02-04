@@ -31,9 +31,9 @@ public class ResultadosActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultados);
-
 
         //boton de guardar
         // Encuentra la referencia del botón
@@ -57,6 +57,7 @@ public class ResultadosActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
         // Establecer la barra de estado como transparente
         getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
@@ -149,6 +150,7 @@ public class ResultadosActivity extends AppCompatActivity {
         headerLayout.setOnClickListener(backClickListener);
         buttonBack.setOnClickListener(backClickListener);
 
+
     }
 
     //funciones para guardar dando cliick en el boton de guardar
@@ -161,6 +163,7 @@ public class ResultadosActivity extends AppCompatActivity {
         String tratamiento = getIntent().getStringExtra("fungicida"); // Nuevo campo para tratamiento
         //String modo = getIntent().getStringExtra("modo");
         String dosis = getIntent().getStringExtra("dosis");
+        String aplicar = getIntent().getStringExtra("aplicar");
 
         // Obtener instancia de DBmanager
         DBmanager dbManager = new DBmanager(this);
@@ -171,7 +174,7 @@ public class ResultadosActivity extends AppCompatActivity {
 
             // Llamar al método insertarResultado con los datos relevantes
             //dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento);
-            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento, dosis);
+            dbManager.insertarResultado(enfermedad, precision, obtenerFechaHoraActual(), byteArray, tratamiento, dosis, aplicar );
 
 
             // Mostrar mensaje de éxito o realizar otras acciones según sea necesario

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             // Insertar datos de prueba
             dbManager.insertarTratamiento("\nPlaga Hoja con Pulguilla", "Aspersión, intervalo se seguridad 14 días.","Contacto, ingestión", "KUIK 90 PS","300g - 400g por hectárea" );
             dbManager.insertarTratamiento("\nHoja Sana", "No necesitas aplicar fungicidas","SD","SD","SD");
-            dbManager.insertarTratamiento("\nEnfermedad Hoja con Tizón Tardío", "Aspersión, intervalo se seguridad 14 días.","Sistémico","ALLIETE","2.5 kg por hectárea");
+            dbManager.insertarTratamiento("\nEnfermedad Hoja con Tizón Tardío", "Aspersión, intervalo de seguridad 14 días.","Sistémico","ALLIETE","2.5 kg por hectárea");
             dbManager.insertarTratamiento("\nEnfermedad Hoja con Tizón Temprano", "Asperción", "Contacto","CUPRAVIT","2kg - 4kg por hectárea");
             //dbManager.insertarTratamiento("\nHoja con Pulguilla", "Aspersión","Contacto, ingestión, Sistémico", "FOLIMART","600ml - 900ml por hectárea" );
 

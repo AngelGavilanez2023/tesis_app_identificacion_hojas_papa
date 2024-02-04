@@ -114,6 +114,7 @@ public class DBmanager {
     public static final String IMAGEN_RESULTADO = "imagen";  // Cambiado de IMAGEN_RESULTADO_PATH a IMAGEN_RESULTADO
     public static final String TRATAMIENTO_RESULTADO = "tratamiento"; // Nuevo campo para tratamiento
     public static final String DOSIS_RESULTADO = "dosis"; // Nuevo campo para tratamiento
+    public static final String APLICAR_RESULTADO = "aplicar"; // Nuevo campo para tratamiento
 
 
     public static final String TABLE_RESULTADOS_CREATE = "CREATE TABLE resultados (" +
@@ -123,9 +124,11 @@ public class DBmanager {
             "fecha_hora TEXT," +
             "imagen BLOB," +
             "tratamiento TEXT," +
-            "dosis TEXT)";  // Nuevo campo para tratamiento
+            "dosis TEXT," +
+            "aplicar TEXT)";  // Nuevo campo para tratamiento
 
-    public void insertarResultado(String enfermedad, float accuracy, String fechaHora, byte[] imagen, String tratamiento, String dosis) {
+
+    public void insertarResultado(String enfermedad, float accuracy, String fechaHora, byte[] imagen, String tratamiento, String dosis, String aplicar) {  // Nuevo campo para tratamiento
         ContentValues cv = new ContentValues();
         cv.put(ENFERMEDAD_RESULTADO, enfermedad);
         cv.put(ACCURACY_RESULTADO, accuracy);
@@ -133,6 +136,7 @@ public class DBmanager {
         cv.put(IMAGEN_RESULTADO, imagen);
         cv.put(TRATAMIENTO_RESULTADO, tratamiento);  // Nuevo campo para tratamiento
         cv.put(DOSIS_RESULTADO, dosis);  // Nuevo campo para tratamiento
+        cv.put(APLICAR_RESULTADO, aplicar);  // Nuevo campo para tratamiento
         this._basededatos.insert(TABLE_RESULTADOS, null, cv);
         Log.d("inserción resultado", "correcta");
     }
@@ -148,7 +152,7 @@ public class DBmanager {
             SQLiteDatabase db = _conexion.getReadableDatabase();
 
             // Realizar la consulta para obtener los resultados
-            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO, IMAGEN_RESULTADO, TRATAMIENTO_RESULTADO, DOSIS_RESULTADO};  // Nuevo campo para tratamiento
+            String[] columnas = {ID_RESULTADO, ENFERMEDAD_RESULTADO, ACCURACY_RESULTADO, FECHA_HORA_RESULTADO, IMAGEN_RESULTADO, TRATAMIENTO_RESULTADO, DOSIS_RESULTADO, APLICAR_RESULTADO};  // Nuevo campo para tratamiento
 
             Cursor cursor = db.query(TABLE_RESULTADOS, columnas, null, null, null, null, null, null);
 
@@ -161,6 +165,7 @@ public class DBmanager {
                 int imagenIndex = cursor.getColumnIndex(IMAGEN_RESULTADO); // Cambiado de imagenPathIndex a imagenIndex
                 int tratamientoIndex = cursor.getColumnIndex(TRATAMIENTO_RESULTADO);  // Nuevo campo para tratamiento
                 int dosisIndex = cursor.getColumnIndex(DOSIS_RESULTADO);  // Nuevo campo para tratamiento
+                int aplicarIndex = cursor.getColumnIndex(APLICAR_RESULTADO);  // Nuevo campo para tratamiento
 
                 do {
                     int id = cursor.getInt(idIndex);
@@ -170,9 +175,10 @@ public class DBmanager {
                     byte[] imagenBytes = cursor.getBlob(imagenIndex); // Cambiado de getString a getBlob
                     String tratamiento = cursor.getString(tratamientoIndex);  // Nuevo campo para tratamiento
                     String dosis = cursor.getString(dosisIndex);  // Nuevo campo para tratamiento
+                    String aplicar = cursor.getString(aplicarIndex);  // Nuevo campo para tratamiento
 
 
-                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora, imagenBytes, tratamiento, dosis);  // Nuevo campo para tratamiento
+                    Resultados resultado = new Resultados(id, enfermedad, String.valueOf(accuracy), fechaHora, imagenBytes, tratamiento, dosis, aplicar );  // Nuevo campo para tratamiento
                     resultados.add(resultado);
                 } while (cursor.moveToNext());
             }
@@ -185,6 +191,18 @@ public class DBmanager {
 
         return resultados;
     }
+
+    //funcion para eliminar un resultado
+    public void eliminarResultadoDeBD(int resultadoId) {
+        try {
+            SQLiteDatabase db = _conexion.getWritableDatabase();
+            db.delete(TABLE_RESULTADOS, ID_RESULTADO + "=?", new String[]{String.valueOf(resultadoId)});
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

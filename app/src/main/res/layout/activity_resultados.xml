@@ -259,27 +259,42 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Botón guardar -->
-            <Button
-                android:id="@+id/btnGuardar"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawableLeft="@drawable/guardarr"
-                android:backgroundTint="#FFFBFE"
-                android:text=""
-                android:layout_marginTop="16dp"/>
-            <!-- Botón "Volver" -->
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:backgroundTint="#8EB534"
-                android:drawableLeft="@drawable/ic_volver"
-                android:text="Volver"
-                android:textAllCaps="false"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="18dp">
+
+                <!-- Botón guardar -->
+
+
+                <Button
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#8EB534"
+                    android:text="Guardar"
+                    android:drawableLeft="@drawable/ic_guardar"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp" />
+
+
+                <!-- Botón "Volver" -->
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#B2B0B0"
+                    android:drawableLeft="@drawable/ic_cancelar"
+                    android:text="Cancelar"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp" /> <!-- Agregamos un margen a la izquierda para separar los botones -->
+            </LinearLayout>
 
 
 
