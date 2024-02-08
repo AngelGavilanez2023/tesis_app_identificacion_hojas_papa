@@ -1,11 +1,13 @@
 package com.example.base4;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -289,20 +291,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    //FUNCION PARA TENER UN CUADRO DE DIALOGO PARA SALIR DE LA APLICACION
     @Override
     public void onBackPressed() {
-        // Verificar si hay fragmentos en el backstack
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            // Si hay fragmentos, quitar el fragmento actual y mostrar la actividad principal
-            getSupportFragmentManager().popBackStack();
-        } else {
-            // Si no hay fragmentos, realizar el comportamiento predeterminado (cerrar la actividad)
-            super.onBackPressed();
-        }
+        // Crear un diálogo de confirmación
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("¿Está seguro de salir de la aplicación?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Si el usuario confirma, salir de la aplicación
+                finishAffinity(); // Cierra todas las actividades de la aplicación
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Si el usuario cancela, cerrar el diálogo y no hacer nada
+                dialog.dismiss();
+            }
+        });
+        // Mostrar el diálogo
+        builder.show();
     }
-
 
 
 

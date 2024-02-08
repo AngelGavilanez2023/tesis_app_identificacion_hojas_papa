@@ -12,45 +12,44 @@ import com.example.base4.modelo.Resultados;
 
 import java.util.ArrayList;
 
-
 public class DBmanager {
-    //crear la tabla tratamiento
+    // Crear la tabla tratamiento
     public static final String TABLE_TRATAMIENTO = "tratamientos";
     public static final String ID = "_id";
-    public static final String ENFERMEDAD = "enfermedad";
-    public static final String APLICAR = "aplicar";
-    public static final String MODO = "modo";
-    public static final String FUNGICIDA = "fungicida";
-    public static final String DOSIS = "dosis";
+    public static final String ENFERMEDAD = "enfermedad_tra"; // Cambiado el nombre del atributo
+    public static final String APLICAR = "aplicar_tra"; // Cambiado el nombre del atributo
+    public static final String MODO = "modo_tra"; // Cambiado el nombre del atributo
+    public static final String FUNGICIDA = "fungicida_tra"; // Cambiado el nombre del atributo
+    public static final String DOSIS = "dosis_tra"; // Cambiado el nombre del atributo
 
-    //crear la tabla enfermedad
+    // Crear la tabla enfermedad
     public static final String TABLE_TRATAMIENTOS_CREATE = "CREATE TABLE tratamientos (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "enfermedad TEXT," +
-            "aplicar TEXT," +
-            "modo TEXT," +
-            "fungicida TEXT," +
-            "dosis TEXT)";
+            "enfermedad_tra TEXT," + // Cambiado el nombre del atributo
+            "aplicar_tra TEXT," + // Cambiado el nombre del atributo
+            "modo_tra TEXT," + // Cambiado el nombre del atributo
+            "fungicida_tra TEXT," + // Cambiado el nombre del atributo
+            "dosis_tra TEXT)"; // Cambiado el nombre del atributo
 
     private DBconexion _conexion;
     private SQLiteDatabase _basededatos;
 
-    //constructor
-    public DBmanager(Context context){
+    // Constructor
+    public DBmanager(Context context) {
         _conexion = new DBconexion(context);
     }
 
-    public DBmanager open() throws Exception{
+    public DBmanager open() throws Exception {
         _basededatos = _conexion.getWritableDatabase();
         return this;
     }
 
-    public void close(){
+    public void close() {
         _conexion.close();
     }
 
-    //implementar los metodos CRUD
-    public void insertarTratamiento(String enfermedad, String aplicar, String modo, String fungicida, String dosis){
+    // Implementar los métodos CRUD
+    public void insertarTratamiento(String enfermedad, String aplicar, String modo, String fungicida, String dosis) {
         ContentValues cv = new ContentValues();
         cv.put(ENFERMEDAD, enfermedad);
         cv.put(APLICAR, aplicar);
@@ -61,9 +60,7 @@ public class DBmanager {
         Log.d("inserción", "correcta");
     }
 
-
-
-    //funcion para obtener los tratamientos desde la bbdd
+    // Función para obtener los tratamientos desde la base de datos
     public Tratamiento obtenerTratamiento(String enfermedad) {
         Tratamiento tratamiento = null;
 
@@ -105,6 +102,7 @@ public class DBmanager {
 
         return tratamiento;
     }
+
 
     public static final String TABLE_RESULTADOS = "resultados";
     public static final String ID_RESULTADO = "_id";
