@@ -7,7 +7,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.base4"
+        applicationId = "com.utcpapa.miapp"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -59,3 +59,4 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     //dependencia de pdf
 }
+

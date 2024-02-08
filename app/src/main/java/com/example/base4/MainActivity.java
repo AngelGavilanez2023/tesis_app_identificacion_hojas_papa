@@ -3,11 +3,13 @@ package com.example.base4;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private int imageSize = 256;
     private DBmanager dbManager;
 
+    private Bitmap defaultImageBitmap;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#88000000")); // Negro con 50% de opacidad
 
         Button btnMostrarResultados = findViewById(R.id.btnMostrarResultados);
+
+        defaultImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.agricultor_celular_3);
+
 
         // Desactivar el modo oscuro
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -233,50 +241,69 @@ public class MainActivity extends AppCompatActivity {
 
     //*********************************| Metodo de Resultados capturados hacia la Vista Dos (resultadosActivity) |********************************************
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Bitmap image = null;  // Declarar la variable image al principio del método
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bitmap image = null;  // Inicializa la variable image
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == 3) {
-                image = (Bitmap) data.getExtras().get("data");
-                int dimension = Math.min(image.getWidth(), image.getHeight());
-                image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-
-                // Eliminado el uso de validarHoja
-                classifyImage(image);
-            } else {
-                Uri dat = data.getData();
-                try {
-                    image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (requestCode == 3) { // Si la solicitud proviene de la cámara
+                if (data != null && data.getExtras() != null) {
+                    image = (Bitmap) data.getExtras().get("data");
+                    // Escala la imagen si es necesario y realiza cualquier otro procesamiento
                 }
+            } else if (requestCode == 2) { // Si la solicitud proviene de la galería
+                if (data != null && data.getData() != null) {
+                    Uri selectedImageUri = data.getData();
+                    try {
+                        image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                        // Escala la imagen si es necesario y realiza cualquier otro procesamiento
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            // Si se ha obtenido una imagen válida, procesarla y mostrarla
+            if (image != null) {
                 imageView.setImageBitmap(image);
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-
-                // Eliminado el uso de validarHoja
                 classifyImage(image);
+            } else {
+                // Si no se ha obtenido una imagen válida, mostrar un mensaje de error
+                String errorMessage = "\nEsto no parece ser una hoja de Papa.";
+                Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
+                resultadosIntent.putExtra("diseaseName", errorMessage);
+
+                // Convertir la imagen predeterminada a un array de bytes
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                defaultImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                resultadosIntent.putExtra("imagen", byteArray);
+
+                // Establecer la imagen predeterminada y mostrar la actividad de resultados
+                setDefaultImage();
+                startActivity(resultadosIntent);
             }
-        } else {
-            // Eliminado el uso de validarHoja
-            String errorMessage = "\nEsto no parece ser una hoja de Papa.";
-            Intent resultadosIntent = new Intent(MainActivity.this, ResultadosActivity.class);
-            resultadosIntent.putExtra("diseaseName", errorMessage);
-
-            // Convertir la imagen a un array de bytes
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            resultadosIntent.putExtra("imagen", byteArray);
-
-            // Llamar al método para establecer la imagen predeterminada
-            setDefaultImage();
-
-            startActivity(resultadosIntent);
+        } else if (resultCode == RESULT_CANCELED) {
+            // El usuario canceló la operación, puedes mostrar un mensaje o realizar alguna otra acción si es necesario
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+
+    @Override
+    public void onBackPressed() {
+        // Verificar si hay fragmentos en el backstack
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            // Si hay fragmentos, quitar el fragmento actual y mostrar la actividad principal
+            getSupportFragmentManager().popBackStack();
+        } else {
+            // Si no hay fragmentos, realizar el comportamiento predeterminado (cerrar la actividad)
+            super.onBackPressed();
+        }
+    }
+
+
 
 
 }
